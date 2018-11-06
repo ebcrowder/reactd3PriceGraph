@@ -1,9 +1,11 @@
 import React from 'react';
 
+import Price from '../components/Price';
+
 const index = () => {
   return (
     <div>
-      <p>hello</p>
+      <Price />
     </div>
   );
 };
