@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from './Button';
 
 const API_BASE = 'https://www.coinbase.com/api/v2/prices/';
 const API_SPOT = 'spot';
@@ -8,7 +9,8 @@ class Price extends Component {
   state = {
     currentValue: '',
     currentBase: '',
-    currentCurrency: ''
+    currentCurrency: '',
+    currencySelection: 'BTC'
   };
 
   fetchCurrentValue = async coin => {
@@ -27,8 +29,16 @@ class Price extends Component {
     }
   };
 
+  changeCurrency = () => {
+    index = COIN_OPTIONS.indexOf(this.state.currencySelection);
+    if (index >= 0 && index < COIN_OPTIONS.length - 1)
+      nextItem = COIN_OPTIONS[index + 1];
+
+    this.setState({ currencySelection: nextItem });
+  };
+
   componentDidMount() {
-    this.fetchCurrentValue(COIN_OPTIONS[0]);
+    this.fetchCurrentValue(this.state.currencySelection);
   }
 
   render() {
@@ -37,6 +47,11 @@ class Price extends Component {
         <p>{this.state.currentValue}</p>
         <p>{this.state.currentBase}</p>
         <p>{this.state.currentCurrency}</p>
+        <Button
+          className="button"
+          onClick={this.changeCurrency}
+          currency={this.state.currencySelection}
+        />
       </div>
     );
   }
