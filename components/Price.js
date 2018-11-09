@@ -30,11 +30,13 @@ class Price extends Component {
   };
 
   changeCurrency = () => {
-    index = COIN_OPTIONS.indexOf(this.state.currencySelection);
-    if (index >= 0 && index < COIN_OPTIONS.length - 1)
-      nextItem = COIN_OPTIONS[index + 1];
-
-    this.setState({ currencySelection: nextItem });
+    this.setState(
+      prevState => ({
+        currencySelection:
+          (prevState.currencySelection + 1) % COIN_OPTIONS.length
+      }),
+      this.fetchCurrentValue(this.state.currencySelection)
+    );
   };
 
   componentDidMount() {

@@ -11,7 +11,9 @@ const ButtonWrapper = styled.button`
 `;
 
 const Button = props => {
-  return <ButtonWrapper>{props.currency}</ButtonWrapper>;
+  return (
+    <ButtonWrapper onClick={props.onClick}>{props.currency}</ButtonWrapper>
+  );
 };
 
 export default Button;
