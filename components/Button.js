@@ -10,10 +10,8 @@ const ButtonWrapper = styled.button`
   border-radius: 3px;
 `;
 
-const Button = props => {
-  return (
-    <ButtonWrapper onClick={props.onClick}>{props.currency}</ButtonWrapper>
-  );
+const Button = ({ onClick, currency }) => {
+  return <ButtonWrapper onClick={onClick}>{currency}</ButtonWrapper>;
 };
 
 export default Button;

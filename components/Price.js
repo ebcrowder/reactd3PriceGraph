@@ -10,7 +10,8 @@ class Price extends Component {
     currentValue: '',
     currentBase: '',
     currentCurrency: '',
-    currencySelection: 'BTC'
+    currencySelection: '',
+    currencyIndex: 0
   };
 
   fetchCurrentValue = async coin => {
@@ -30,31 +31,28 @@ class Price extends Component {
   };
 
   changeCurrency = () => {
-    this.setState(
-      prevState => ({
-        currencySelection:
-          (prevState.currencySelection + 1) % COIN_OPTIONS.length
-      }),
-      this.fetchCurrentValue(this.state.currencySelection)
-    );
+    this.setState({
+      currencyIndex: (this.state.currencyIndex + 1) % COIN_OPTIONS.length
+    }),
+      this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
   };
 
   componentDidMount() {
-    this.fetchCurrentValue(this.state.currencySelection);
+    this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
   }
 
   render() {
     return (
-      <div>
+      <>
         <p>{this.state.currentValue}</p>
         <p>{this.state.currentBase}</p>
         <p>{this.state.currentCurrency}</p>
         <Button
           className="button"
           onClick={this.changeCurrency}
-          currency={this.state.currencySelection}
+          currency={COIN_OPTIONS[this.state.currencyIndex]}
         />
-      </div>
+      </>
     );
   }
 }
