@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from './Button';
 
 const API_BASE = 'https://www.coinbase.com/api/v2/prices/';
+const API_HISTORY = 'historic?period=';
 const API_SPOT = 'spot';
 const COIN_OPTIONS = ['BTC', 'BCH', 'ETH', 'LTC'];
 
@@ -9,9 +10,9 @@ class Price extends Component {
   state = {
     currentValue: '',
     currentBase: '',
-    currentCurrency: '',
-    currencySelection: '',
-    currencyIndex: 0
+    currencyIndex: 0,
+    priceHistory: {},
+    pricePeriod: 'week'
   };
 
   fetchCurrentValue = async coin => {
@@ -22,12 +23,18 @@ class Price extends Component {
 
       this.setState({
         currentValue: d.data.amount,
-        currentBase: d.data.base,
-        currentCurrency: d.data.currency
+        currentBase: d.data.base
       });
     } catch {
       throw new Error('nope');
     }
+  };
+
+  fetchValueHistory = async (coin, period) => {
+    const d = await fetch(
+      `${API_BASE}${coin}-USD/${API_HISTORY}${period}`
+    ).then(r => r.json());
+    this.setState({ priceHistory: d && d.data && d.data.prices });
   };
 
   changeCurrency = () => {
@@ -35,19 +42,22 @@ class Price extends Component {
       {
         currencyIndex: (this.state.currencyIndex + 1) % COIN_OPTIONS.length
       },
-      () => this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex])
+      () => {
+        this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
+        this.fetchValueHistory(
+          COIN_OPTIONS[this.state.currencyIndex],
+          this.state.pricePeriod
+        );
+      }
     );
   };
 
   componentDidMount() {
     this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
-  }
-
-  componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    if (this.props.currencyIndex !== prevProps.currencyIndex) {
-      this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
-    }
+    this.fetchValueHistory(
+      COIN_OPTIONS[this.state.currencyIndex],
+      this.state.pricePeriod
+    );
   }
 
   render() {
@@ -55,9 +65,7 @@ class Price extends Component {
       <>
         <p>{this.state.currentValue}</p>
         <p>{this.state.currentBase}</p>
-        <p>{this.state.currentCurrency}</p>
         <Button
-          className="button"
           onClick={this.changeCurrency}
           currency={COIN_OPTIONS[this.state.currencyIndex]}
         />

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Price from '../components/Price';
+import Data from '../components/Data';
 
 const index = () => {
   return (
     <div>
-      <Price />
+      <Data />
     </div>
   );
 };
