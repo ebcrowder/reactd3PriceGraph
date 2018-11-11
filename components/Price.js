@@ -31,14 +31,23 @@ class Price extends Component {
   };
 
   changeCurrency = () => {
-    this.setState({
-      currencyIndex: (this.state.currencyIndex + 1) % COIN_OPTIONS.length
-    }),
-      this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
+    this.setState(
+      {
+        currencyIndex: (this.state.currencyIndex + 1) % COIN_OPTIONS.length
+      },
+      () => this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex])
+    );
   };
 
   componentDidMount() {
     this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
+  }
+
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.currencyIndex !== prevProps.currencyIndex) {
+      this.fetchCurrentValue(COIN_OPTIONS[this.state.currencyIndex]);
+    }
   }
 
   render() {
