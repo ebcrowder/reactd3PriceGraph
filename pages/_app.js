@@ -4,9 +4,8 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html {
-    color: white;
-    background-color: black;
-    font-size: 20px;
+    color: #ffffff;
+    background-color: #212121;
     font-family: 'Source Sans Pro', sans-serif;
   }
 `;

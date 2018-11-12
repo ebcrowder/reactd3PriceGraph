@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Button from './Button';
+import Card, { CardGrid } from './Card';
 
 const API_BASE = 'https://www.coinbase.com/api/v2/prices/';
 const API_HISTORY = 'historic?period=';
@@ -63,12 +63,14 @@ class Price extends Component {
   render() {
     return (
       <>
-        <p>{this.state.currentValue}</p>
-        <p>{this.state.currentBase}</p>
-        <Button
-          onClick={this.changeCurrency}
-          currency={COIN_OPTIONS[this.state.currencyIndex]}
-        />
+        <CardGrid>
+          <Card
+            currentValue={this.state.currentValue}
+            currentBase={this.state.currentBase}
+            onClick={this.changeCurrency}
+            currency={COIN_OPTIONS[this.state.currencyIndex]}
+          />
+        </CardGrid>
       </>
     );
   }
