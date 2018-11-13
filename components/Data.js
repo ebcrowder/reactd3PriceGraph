@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Card, { CardGrid } from './Card';
+import Chart from './Chart';
 
 const API_BASE = 'https://www.coinbase.com/api/v2/prices/';
 const API_HISTORY = 'historic?period=';
@@ -11,7 +12,7 @@ class Price extends Component {
     currentValue: '',
     currentBase: '',
     currencyIndex: 0,
-    priceHistory: {},
+    priceHistory: null,
     pricePeriod: 'week'
   };
 
@@ -71,6 +72,9 @@ class Price extends Component {
             currency={COIN_OPTIONS[this.state.currencyIndex]}
           />
         </CardGrid>
+        {this.state.priceHistory !== null ? (
+          <Chart prices={this.state.priceHistory} />
+        ) : null}
       </>
     );
   }
