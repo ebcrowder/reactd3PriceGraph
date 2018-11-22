@@ -19,14 +19,20 @@ export const CardGrid = styled.div`
   grid-template-rows: auto;
 `;
 
-const Card = ({ currentBase, currentValue, onClick }) => {
+export interface CardProps {
+  currentBase: string;
+  currentValue: string;
+  onClick: any;
+}
+
+const Card = (props: CardProps) => {
   return (
-    <CardContainer onClick={onClick}>
+    <CardContainer onClick={props.onClick}>
       <div>
-        <p>{currentValue}</p>
+        <p>{props.currentValue}</p>
       </div>
       <div>
-        <p>{currentBase}</p>
+        <p>{props.currentBase}</p>
       </div>
     </CardContainer>
   );
