@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { VictoryChart, VictoryTheme, VictoryLine } from 'victory';
 
 export default class LineBase extends Component {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Card, { CardGrid } from './Card';
 import Chart from './Chart';
 

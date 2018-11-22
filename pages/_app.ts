@@ -1,4 +1,3 @@
-import React from 'react';
 import App, { Container } from 'next/app';
 import { createGlobalStyle } from 'styled-components';
 
