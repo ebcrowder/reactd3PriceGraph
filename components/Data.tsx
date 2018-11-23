@@ -4,7 +4,6 @@ import Card, { CardGrid } from './Card';
 import Chart from './Chart';
 
 const API_BASE = 'https://api.pro.coinbase.com/products/';
-const API_HISTORY = '?start=2018-07-10T12:00:00?stop=2018-07-15&12:00:00';
 const COIN_OPTIONS = ['BTC', 'BCH', 'ETH', 'LTC'];
 
 interface State {
@@ -42,16 +41,15 @@ class Price extends React.Component<object, State> {
   fetchValueHistory = async (coin: string, period: number) => {
     let priceArray: any = [];
 
-    await fetch(`${API_BASE}${coin}-USD/candles${API_HISTORY}${period}`)
+    await fetch(`${API_BASE}${coin}-USD/candles?granularity=${period}`)
       .then(r => r.json())
       .then(r =>
-        r.forEach((a: any) =>
+        r.forEach((a: any) => {
           priceArray.push({
-            // time: moment(new Date(a[0])).format('MM-DD'),
-            time: a[0],
+            time: moment.unix(a[0]).format('MM/DD'),
             price: a[1]
-          })
-        )
+          });
+        })
       );
     this.setState({ priceHistory: priceArray });
   };
