@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
@@ -19,20 +19,20 @@ export const CardGrid = styled.div`
   grid-template-rows: auto;
 `;
 
-export interface CardProps {
-  currentBase: string;
+export interface Props {
   currentValue: string;
   onClick: any;
+  currency: string;
 }
 
-const Card = (props: CardProps) => {
+const Card = (props: Props) => {
   return (
     <CardContainer onClick={props.onClick}>
       <div>
         <p>{props.currentValue}</p>
       </div>
       <div>
-        <p>{props.currentBase}</p>
+        <p>{props.currency}</p>
       </div>
     </CardContainer>
   );

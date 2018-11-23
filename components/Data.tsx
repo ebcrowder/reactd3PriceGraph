@@ -1,41 +1,59 @@
-import { Component } from 'react';
+import * as React from 'react';
+import moment from 'moment';
 import Card, { CardGrid } from './Card';
 import Chart from './Chart';
 
-const API_BASE = 'https://www.coinbase.com/api/v2/prices/';
-const API_HISTORY = 'historic?period=';
-const API_SPOT = 'spot';
+const API_BASE = 'https://api.pro.coinbase.com/products/';
+const API_HISTORY = '?start=2018-07-10T12:00:00?stop=2018-07-15&12:00:00';
 const COIN_OPTIONS = ['BTC', 'BCH', 'ETH', 'LTC'];
 
-class Price extends Component {
+interface State {
+  currentTime: string;
+  currentValue: string;
+  currencyIndex: number;
+  priceHistory: Array<number>;
+  pricePeriod: number;
+}
+
+class Price extends React.Component<object, State> {
   state = {
+    currentTime: '',
     currentValue: '',
-    currentBase: '',
     currencyIndex: 0,
-    priceHistory: null,
-    pricePeriod: 'week'
+    priceHistory: [],
+    pricePeriod: 86400
   };
 
-  fetchCurrentValue = async coin => {
+  fetchCurrentValue = async (coin: string) => {
     try {
-      const d = await fetch(`${API_BASE}${coin}-USD/${API_SPOT}`).then(r =>
-        r.json()
-      );
-
-      this.setState({
-        currentValue: d.data.amount,
-        currentBase: d.data.base
-      });
+      await fetch(`${API_BASE}${coin}-USD/trades`)
+        .then(r => r.json())
+        .then(r =>
+          this.setState({
+            currentTime: r[0].time,
+            currentValue: parseFloat(r[0].price).toFixed(2)
+          })
+        );
     } catch {
       throw new Error('nope');
     }
   };
 
-  fetchValueHistory = async (coin, period) => {
-    const d = await fetch(
-      `${API_BASE}${coin}-USD/${API_HISTORY}${period}`
-    ).then(r => r.json());
-    this.setState({ priceHistory: d && d.data && d.data.prices });
+  fetchValueHistory = async (coin: string, period: number) => {
+    let priceArray: any = [];
+
+    await fetch(`${API_BASE}${coin}-USD/candles${API_HISTORY}${period}`)
+      .then(r => r.json())
+      .then(r =>
+        r.forEach((a: any) =>
+          priceArray.push({
+            // time: moment(new Date(a[0])).format('MM-DD'),
+            time: a[0],
+            price: a[1]
+          })
+        )
+      );
+    this.setState({ priceHistory: priceArray });
   };
 
   changeCurrency = () => {
@@ -67,12 +85,11 @@ class Price extends Component {
         <CardGrid>
           <Card
             currentValue={this.state.currentValue}
-            currentBase={this.state.currentBase}
             onClick={this.changeCurrency}
             currency={COIN_OPTIONS[this.state.currencyIndex]}
           />
         </CardGrid>
-        {this.state.priceHistory !== null ? (
+        {this.state.priceHistory ? (
           <Chart prices={this.state.priceHistory} />
         ) : null}
       </>

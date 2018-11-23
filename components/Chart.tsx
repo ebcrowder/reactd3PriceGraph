@@ -1,18 +1,22 @@
-import { Component } from 'react';
+import * as React from 'react';
 import { VictoryChart, VictoryTheme, VictoryLine } from 'victory';
 
-export default class LineBase extends Component {
-  formatPriceHistory = data =>
+export interface Props {
+  prices: Array<number>;
+}
+
+export default class LineBase extends React.Component<Props, object> {
+  formatPriceHistory = (data: Array<number>) =>
     data
-      .map(d => ({
+      .map((d: any) => ({
         price: Number(d.price),
         time: new Date(d.time).toLocaleString()
       }))
-      .sort((a, b) => a.time - b.time);
+      .sort((a: any, b: any) => a.time - b.time);
 
   render() {
     const formattedPrices = this.formatPriceHistory(this.props.prices);
-    console.log(formattedPrices);
+
     return (
       <VictoryChart theme={VictoryTheme.material}>
         <VictoryLine
